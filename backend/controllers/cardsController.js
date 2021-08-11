@@ -37,20 +37,28 @@ module.exports.createCard = (req, res) => {
 // Deleting Cards
 module.exports.deleteCard = (req, res) => {
   const cardId = req.params._id;
+  const thisCard = Card.findById(cardId);
 
-  Card.findByIdAndRemove(cardId)
-    .then((card) => {
-      if (!card) {
-        return res.status(404).send({ message: 'Card not Found' });
-      }
-      return res.send({ data: card });
-    })
-    .catch((err) => {
-      if (err.name === ('CastError')) {
-        res.status(400).send({ message: 'Sorry. Thats not a Proper Card' });
-      }
-      res.status(500).send(badReturn(err));
-    });
+  // test log, remove me later!!!
+  console.log(`the user ${req.user._id}, and the card owner ${thisCard.owner}` );
+
+  if (req.user._id === thisCard.owner){
+    Card.findByIdAndRemove(cardId)
+      .then((card) => {
+        if (!card) {
+          return res.status(404).send({ message: 'Card not Found' });
+        }
+        return res.send({ data: card });
+      })
+      .catch((err) => {
+        if (err.name === ('CastError')) {
+          res.status(400).send({ message: 'Sorry. Thats not a Proper Card' });
+        }
+        res.status(500).send(badReturn(err));
+      });
+  }
+
+  res.status(500).send(badReturn(err))
 };
 
 // Like a Card
