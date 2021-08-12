@@ -65,10 +65,10 @@ const badReturn = (err) => ({ message: `ServerError ${err}` }
   module.exports.login = (req, res) => {
     const { email, password } = req.body;
 
-    return User.findUserByCredentials(email, password).select('+password')
+    return User.findUserByCredentials(email, password)
       .then((user) => {
         const userToken = jwt.sign({ _id: user._id },
-                            NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
+                            process.env.NODE_ENV === 'production' ? process.env.JWT_SECRET : 'dev-secret',
                             { expiresIn: '7d' }
                           );
         res
