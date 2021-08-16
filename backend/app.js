@@ -63,6 +63,17 @@ const { PORT = 3000 } = process.env;
   app.use(errors());
 
 // Central Error Handler
+app.use((err, _, res, next) => {
+  const { statusCode = 500, message } = err;
+  res
+    .status(statusCode)
+    .send({
+      message: statusCode === 500
+        ? 'An error occurred on the server'
+        : message
+    });
+});
+
 
 app.listen(PORT, () => {
   // if everything works fine, the console will show which port the application is listening to
