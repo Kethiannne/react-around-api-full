@@ -40,15 +40,31 @@ const MyErr = require('../errors/errors');
     const thisCard = Card.findById(cardId);
 
     // test log, remove me later!!!
-    console.log(`the user ${req.user._id}, and the card owner ${thisCard.owner}` );
 
-      Card.findByIdAndRemove(cardId)
-        .then((card) => {
-          if (!card) {
-            throw new MyErr(404, 'Card not Found');
-          }
-          return res.send({ data: card });
-        })
+      Card.findById(cardId)
+      .then((card)=> {
+        if (req.user._id !== card.owner._id.toString()) {
+          throw new MyErr(403, 'Authorization error');
+        }
+        return card
+      })
+      .then((card)=>{
+
+      })
+      // Card.findByIdAndRemove(cardId)
+      //   .then((card) => {
+      //     console.log(`the user ${req.user._id}, and the card owner ${card.owner}` );
+      //     if (req.user._id !== card.owner) {
+      //       throw new MyErr(403, 'Authorization error');
+      //     }
+      //     return card
+      //   })
+      //   .then((card) => {
+      //     if (!card) {
+      //       throw new MyErr(404, 'Card not Found');
+      //     }
+      //     return res.send({ data: card });
+      //   })
         .catch((err) =>
           {return castErrorHandler(next, err);}
         );

@@ -1,6 +1,7 @@
 const express = require('express');
 const helmet = require('helmet');
 const Mongoose = require('mongoose');
+const cors = require("cors");
 require('dotenv').config();
 const validateUrl = require('./utils/utils');
 const authMid = require('./middleware/authMiddleware');
@@ -15,6 +16,13 @@ const { PORT = 3000 } = process.env;
 // A section setting up the server and connecting to the database
   const app = express();
   app.use(helmet());
+
+  const allowedOrigins = [
+    "https://www.kethianne.students.nomoreparties.site",
+    "https://kethianne.students.nomoreparties.site",
+    "http://localhost:3000", // Use the port your frontend is served on
+  ];
+  app.use(cors({ origin: allowedOrigins }));
 
   Mongoose.connect('mongodb://localhost:27017/aroundb', {
     useNewUrlParser: true,
