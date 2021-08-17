@@ -1,7 +1,7 @@
 class MyErr extends Error {
-  constructor(errType, message) {
+  constructor(errNum, message) {
     super(message);
-    this.statusCode = errType;
+    this.statusCode = errNum;
   }
 }
 

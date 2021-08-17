@@ -52,6 +52,8 @@ const { PORT = 3000 } = process.env;
     })}),
     createUser
   );
+
+  // add , authMid to these routes!!
   app.use('/cards', authMid, cardsRouter);
   app.use('/users', authMid, usersRouter);
 

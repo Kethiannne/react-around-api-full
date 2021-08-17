@@ -1,4 +1,5 @@
 const express = require('express');
+const { celebrate, Joi } = require('celebrate');
 const {
   getAllCards, createCard, deleteCard, likeCard, unlikeCard,
 } = require('../controllers/cardsController');

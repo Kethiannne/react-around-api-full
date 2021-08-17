@@ -2,119 +2,114 @@ const bcrypt = require('bcryptjs');
 require('dotenv').config();
 const User = require('../models/usersModel');
 const jwt = require('jsonwebtoken');
+const MyErr = require('../errors/errors');
 
-const badReturn = (err) => ({ message: `ServerError ${err}` }
-);
+// To prevent repetition
+  function castErrorHandler(next, err){
+    err.name === 'CastError' ?
+      next(new MyErr(404, 'User not Found')) :
+      next(err);
+  }
 
 // Get All Users
-  module.exports.getAllUsers = (_, res) => {
+  module.exports.getAllUsers = (_, res, next) => {
     User.find({})
       .then((users) => {
         res.status(200).send({ data: users });
       })
-      .catch((err) => {
-        console.log(`Houston we have a problem ${err}`);
-        res.status(500).send(badReturn(err));
-      });
+      .catch(next);
   };
 
 // Return Current User Info
-// still want to test this to see what format it is returned in by default
-  module.exports.getCurrentUser = (req, res) => {
-    const { authorization } = req.headers;
-    if (!authorization || !authorization.startsWith('Bearer ')) {
-      return res
-        .status(401)
-        .send({ message: 'Authorization required' });
-    }
-    console.log(req.user);
-    res.status(201).send(req.user.toJSON());
+// gets ignored and a 404 is returned?
+  module.exports.getCurrentUser = (req, res, next) => {
+    const userId = req.user._id;
+    User.findById(userId)
+      .then((user) => {
+        if (!user) {
+          throw new MyErr(404, 'User not Found');
+        }
+        return res.send({ data: user });
+      })
+      .catch((err) =>
+        {return castErrorHandler(next, err);}
+      );
   };
 
 // Get a Single user
-  module.exports.getUserById = (req, res) => {
+  module.exports.getUserById = (req, res, next) => {
     const userId = req.params._id;
 
     User.findById(userId)
       .then((user) => {
         if (!user) {
-          return res.status(404).send({ message: 'User not Found' });
+          throw new MyErr(404, 'User not Found');
         }
         return res.send({ data: user });
       })
-      .catch((err) => {
-        if (err.name === ('CastError')) {
-          res.status(400).send({ message: 'Sorry. Thats not a Proper User' });
-        }
-        res.status(500).send(badReturn(err));
-      });
-  };
+      .catch((err) =>
+        {return castErrorHandler(next, err);}
+      );
+    };
 
 // Create a User
-  module.exports.createUser = (req, res) => {
+  module.exports.createUser = (req, res, next) => {
     const { name, about, avatar, email, password } = req.body;
       bcrypt.hash(password, 10)
         .then((hash) => {
           User.create({ name, about, avatar, email, password: hash })
         })
         .then((user) => res.send({ data: user }))
-        .catch((err) => res.status(500).send(badReturn(err)));
+        .catch(next);
   };
+
 
 // Login a User
-  module.exports.login = (req, res) => {
-    const { email, password } = req.body;
+module.exports.login = (req, res, next) => {
+  const { email, password } = req.body;
 
-    return User.findUserByCredentials(email, password)
-      .then((user) => {
-        const userToken = jwt.sign({ _id: user._id },
-                            process.env.NODE_ENV === 'production' ? process.env.JWT_SECRET : 'dev-secret',
-                            { expiresIn: '7d' }
-                          );
-        res
-        .status(201)
-        .send({ userToken });
-      })
-      .catch((err) => {
-        res
-          .status(401)
-          .send({ message: 'Incorrect email or password' });
-      });
-  };
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      const userToken = jwt.sign({ _id: user._id },
+                          process.env.NODE_ENV === 'production' ? process.env.JWT_SECRET : 'dev-secret',
+                          { expiresIn: '7d' }
+                        );
+      res
+      .status(201)
+      .send({ userToken });
+    })
+    .catch(next);
+};
+
+
 
 // Edit User Info
-  module.exports.editUserInfo = (req, res) => {
+  module.exports.editUserInfo = (req, res, next) => {
     const { name, about } = req.body;
 
     User.findByIdAndUpdate(req.user._id, { name, about }, { runValidators: true, new: true })
       .then((user) => {
         if (!user) {
-          return res.status(404).send({ message: 'User not Found' });
+          throw new MyErr(404, 'User not Found');
         }
         return res.send({ data: user });
       })
-      .catch((err) => {
-        if (err.name === ('CastError')) {
-          res.status(400).send({ message: 'Sorry. Thats not a Proper User' });
-        }
-        res.status(500).send(badReturn(err));
-      });
+      .catch((err) =>
+        {return castErrorHandler(next, err);}
+      );
   };
 
 // Edit User Avatar
-  module.exports.editAvatar = (req, res) => {
+  module.exports.editAvatar = (req, res, next) => {
     const { avatar } = req.body;
     User.findByIdAndUpdate(req.user._id, { avatar }, { runValidators: true, new: true })
       .then((user) => {
         if (!user) {
-          return res.status(404).send({ message: 'User not Found' });
+          throw new MyErr(404, 'User not Found');
         }
         return res.send({ data: user });
       })
-      .catch((err) => {
-        if (err.name === ('CastError')) {
-          res.status(400).send({ message: 'Sorry. Thats not a Proper User' });
-        }
-        res.status(500).send(badReturn(err));
-      });
+      .catch((err) =>
+        {return castErrorHandler(next, err);}
+      );
   };
