@@ -42,7 +42,6 @@ const MyErr = require('../errors/errors');
     // test log, remove me later!!!
     console.log(`the user ${req.user._id}, and the card owner ${thisCard.owner}` );
 
-    if (req.user._id === thisCard.owner){
       Card.findByIdAndRemove(cardId)
         .then((card) => {
           if (!card) {
@@ -50,10 +49,9 @@ const MyErr = require('../errors/errors');
           }
           return res.send({ data: card });
         })
-        .catch(castErrorHandler(next, err));
-    }
-
-    res.status(404).send('badReturn(err)')
+        .catch((err) =>
+          {return castErrorHandler(next, err);}
+        );
   };
 
 // Like a Card
@@ -70,7 +68,9 @@ const MyErr = require('../errors/errors');
         }
         return res.send({ data: card });
       })
-      .catch(castErrorHandler(next, err));
+      .catch((err) =>
+        {return castErrorHandler(next, err);}
+      );
   };
 
 // Unlike a Card
@@ -86,5 +86,7 @@ const MyErr = require('../errors/errors');
         }
         return res.send({ data: card });
       })
-      .catch(castErrorHandler(next, err));
+      .catch((err) =>
+        {return castErrorHandler(next, err);}
+      );
   };

@@ -63,7 +63,6 @@ const MyErr = require('../errors/errors');
         .catch(next);
   };
 
-
 // Login a User
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
@@ -80,8 +79,6 @@ module.exports.login = (req, res, next) => {
     })
     .catch(next);
 };
-
-
 
 // Edit User Info
   module.exports.editUserInfo = (req, res, next) => {
