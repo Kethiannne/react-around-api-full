@@ -29,7 +29,7 @@ const MyErr = require('../errors/errors');
         if (!user) {
           throw new MyErr(404, 'User not Found');
         }
-        return res.send({ data: user });
+        return res.send({ user });
       })
       .catch((err) =>
         {return castErrorHandler(next, err);}
@@ -59,7 +59,7 @@ const MyErr = require('../errors/errors');
         .then((hash) => {
           User.create({ name, about, avatar, email, password: hash })
         })
-        .then((user) => res.send({ data: user }))
+        .then((user) => res.send({ user }))
         .catch(next);
   };
 
