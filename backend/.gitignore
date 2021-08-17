@@ -12,6 +12,9 @@ node_modules
 # dotenv files
 .env
 
+# .log files
+.log
+
 # System files and IDE settings folders
 .DS_Store
 .idea

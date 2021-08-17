@@ -40,7 +40,7 @@ const MyErr = require('../errors/errors');
     const thisCard = Card.findById(cardId);
 
     // test log, remove me later!!!
-    console.log(`the user ${req.body.user._id}, and the card owner ${thisCard.owner}` );
+    console.log(`the user ${req.user._id}, and the card owner ${thisCard.owner}` );
 
     if (req.user._id === thisCard.owner){
       Card.findByIdAndRemove(cardId)
@@ -58,6 +58,7 @@ const MyErr = require('../errors/errors');
 
 // Like a Card
   module.exports.likeCard = (req, res, next) => {
+
     Card.findByIdAndUpdate(
       req.params._id,
       { $addToSet: { likes: req.user._id } },
