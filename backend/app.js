@@ -42,6 +42,14 @@ const { PORT = 3000 } = process.env;
   app.use(reqLogger);
 
 // Signin and Signup Routes
+
+// Temporary Crash Test
+  app.get('/crash-test', () => {
+    setTimeout(() => {
+      throw new Error('Server will crash now');
+    }, 0);
+  });
+
   app.post('/signin', celebrate({
     body: Joi.object().keys({
       email: Joi.string().required().email(),
