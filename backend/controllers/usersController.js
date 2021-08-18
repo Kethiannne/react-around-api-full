@@ -15,7 +15,7 @@ const MyErr = require('../errors/errors');
   module.exports.getAllUsers = (_, res, next) => {
     User.find({})
       .then((users) => {
-        res.status(200).send({ data: users });
+        res.status(200).send({ users });
       })
       .catch(next);
   };
@@ -29,7 +29,7 @@ const MyErr = require('../errors/errors');
         if (!user) {
           throw new MyErr(404, 'User not Found');
         }
-        return res.send({ user });
+        return res.send(user);
       })
       .catch((err) =>
         {return castErrorHandler(next, err);}
@@ -45,7 +45,7 @@ const MyErr = require('../errors/errors');
         if (!user) {
           throw new MyErr(404, 'User not Found');
         }
-        return res.send({ data: user });
+        return res.send({ user });
       })
       .catch((err) =>
         {return castErrorHandler(next, err);}
@@ -89,7 +89,7 @@ module.exports.login = (req, res, next) => {
         if (!user) {
           throw new MyErr(404, 'User not Found');
         }
-        return res.send({ data: user });
+        return res.send({ user });
       })
       .catch((err) =>
         {return castErrorHandler(next, err);}
@@ -99,12 +99,13 @@ module.exports.login = (req, res, next) => {
 // Edit User Avatar
   module.exports.editAvatar = (req, res, next) => {
     const { avatar } = req.body;
+
     User.findByIdAndUpdate(req.user._id, { avatar }, { runValidators: true, new: true })
       .then((user) => {
         if (!user) {
           throw new MyErr(404, 'User not Found');
         }
-        return res.send({ data: user });
+        return res.send({ user });
       })
       .catch((err) =>
         {return castErrorHandler(next, err);}

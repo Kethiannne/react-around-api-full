@@ -21,6 +21,8 @@ const { PORT = 3000 } = process.env;
     "https://www.kethianne.students.nomoreparties.site",
     "https://kethianne.students.nomoreparties.site",
     "http://localhost:3000", // Use the port your frontend is served on
+    "http://localhost:3001", // Use the port your frontend is served on
+    "http://localhost:3002", // Use the port your frontend is served on
   ];
   app.use(cors({ origin: allowedOrigins }));
 
@@ -51,7 +53,7 @@ const { PORT = 3000 } = process.env;
   app.post('/signup', celebrate({
     body: Joi.object().keys({
       name: Joi.string().min(2).max(30),
-      about: Joi.string().min(2).max(30),
+      about: Joi.string().min(2).max(399),
       avatar: Joi.string().custom(validateUrl),
       email: Joi.string().required().email(),
       password: Joi.string().required().min(8),

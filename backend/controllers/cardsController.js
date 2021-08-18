@@ -39,8 +39,6 @@ const MyErr = require('../errors/errors');
     const cardId = req.params._id;
     const thisCard = Card.findById(cardId);
 
-    // test log, remove me later!!!
-
       Card.findById(cardId)
       .then((card)=> {
         if (req.user._id !== card.owner._id.toString()) {
@@ -48,26 +46,21 @@ const MyErr = require('../errors/errors');
         }
         return card
       })
-      .then((card)=>{
-
+      .then(()=>{
+        Card.findByIdAndRemove(cardId)
+          .then((card) => {
+            if (!card) {
+              throw new MyErr(404, 'Card not Found');
+            }
+            return res.send({ data: card });
+          })
+          .catch((err) =>
+            {return castErrorHandler(next, err);}
+          );
       })
-      // Card.findByIdAndRemove(cardId)
-      //   .then((card) => {
-      //     console.log(`the user ${req.user._id}, and the card owner ${card.owner}` );
-      //     if (req.user._id !== card.owner) {
-      //       throw new MyErr(403, 'Authorization error');
-      //     }
-      //     return card
-      //   })
-      //   .then((card) => {
-      //     if (!card) {
-      //       throw new MyErr(404, 'Card not Found');
-      //     }
-      //     return res.send({ data: card });
-      //   })
-        .catch((err) =>
-          {return castErrorHandler(next, err);}
-        );
+      .catch((err) =>
+        {return castErrorHandler(next, err);}
+      );
   };
 
 // Like a Card
@@ -82,7 +75,7 @@ const MyErr = require('../errors/errors');
         if (!card) {
           throw new MyErr(404, 'Card not Found');
         }
-        return res.send({ data: card });
+        return res.send({ card });
       })
       .catch((err) =>
         {return castErrorHandler(next, err);}
@@ -100,7 +93,7 @@ const MyErr = require('../errors/errors');
         if (!card) {
           throw new MyErr(404, 'Card not Found');
         }
-        return res.send({ data: card });
+        return res.send({ card });
       })
       .catch((err) =>
         {return castErrorHandler(next, err);}

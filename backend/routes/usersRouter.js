@@ -32,8 +32,8 @@ usersRouter.post('/', createUser);
 // Edit User Info
 usersRouter.patch('/me', celebrate({
   body: Joi.object().keys({
-    name: Joi.string().min(2).max(30).required(),
-    about: Joi.string().min(2).max(30).required(),
+    name: Joi.string().min(2).max(40).required(),
+    about: Joi.string().min(2).max(399).required(),
   })}), editUserInfo);
 
 // Edit User Avater
@@ -43,9 +43,3 @@ usersRouter.patch('/me/avatar', celebrate({
   })}), editAvatar);
 
 module.exports = usersRouter;
-
- celebrate({
-  body: Joi.object().keys({
-    name: Joi.string().min(2).max(30).required(),
-    link: Joi.string().custom(validateUrl).required(),
-  })})
