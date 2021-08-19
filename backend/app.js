@@ -12,12 +12,18 @@ const usersRouter = require('./routes/usersRouter');
 const { reqLogger, errLogger } = require('./middleware/logger');
 const { celebrate, Joi, errors } = require('celebrate');
 const { createUser, login } = require('./controllers/usersController');
+const rateLimit = require("express-rate-limit");
 
 const { PORT = 3000 } = process.env;
 
 // A section setting up the server and connecting to the database
   const app = express();
   app.use(helmet());
+
+  const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 150,
+  });
 
   const allowedOrigins = [
     "https://www.kethianne.students.nomoreparties.site",
@@ -39,6 +45,10 @@ const { PORT = 3000 } = process.env;
   app.use(express.json());
 
 // Middleware and Routes
+
+// Rate Limiter
+
+app.use(limiter);
 
 // Request Logger
   app.use(reqLogger);
