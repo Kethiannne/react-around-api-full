@@ -3,8 +3,9 @@ const MyErr = require('../errors/errors');
 
 // To prevent repetition
   function castErrorHandler(next, err){
-    err.name === 'CastError' ?
-      next(new MyErr(404, 'Sorry. Thats not a Proper Card')) :
+    if ((err.name === 'CastError') || (err.message === 'Cannot read property \'owner\' of null')) {
+        next(new MyErr(404, 'Sorry. Thats not a Proper Card'))
+    }
       next(err);
   }
 

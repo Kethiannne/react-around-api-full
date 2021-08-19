@@ -60,7 +60,11 @@ const MyErr = require('../errors/errors');
           User.create({ name, about, avatar, email, password: hash })
         })
         .then((user) => res.send({ user }))
-        .catch(next);
+        .catch((err)=>{
+          (err.name === 'MongoError' && err.code === 11000) ?
+          next(new MyErr(409, 'User Already Exists')) :
+          next(err);
+        });
   };
 
 // Login a User

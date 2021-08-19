@@ -20,18 +20,18 @@ cardsRouter.post('/', celebrate({
 // Like a Card
 cardsRouter.put('/likes/:_id', celebrate({
   params: Joi.object().keys({
-    _id: Joi.string().min(24).max(24).required(),
+    _id: Joi.string().min(24).max(24).required().hex(),
   })}), likeCard);
 
 // Unlike a Card
 cardsRouter.delete('/likes/:_id', celebrate({
   params: Joi.object().keys({
-    _id: Joi.string().min(24).max(24).required(),
+    _id: Joi.string().min(24).max(24).required().hex(),
   })}), unlikeCard);
 
 cardsRouter.delete('/:_id', celebrate({
   params: Joi.object().keys({
-    _id: Joi.string().min(24).max(24).required(),
+    _id: Joi.string().min(24).max(24).required().hex(),
   })}), deleteCard);
 
 module.exports = cardsRouter;

@@ -1,10 +1,12 @@
 const express = require('express');
 const helmet = require('helmet');
 const Mongoose = require('mongoose');
+const MyErr = require('./errors/errors');
 const cors = require("cors");
 require('dotenv').config();
 const validateUrl = require('./utils/utils');
 const authMid = require('./middleware/authMiddleware');
+const errsCentral = require('./middleware/errsCentral.js');
 const cardsRouter = require('./routes/cardsRouter');
 const usersRouter = require('./routes/usersRouter');
 const { reqLogger, errLogger } = require('./middleware/logger');
@@ -74,8 +76,8 @@ const { PORT = 3000 } = process.env;
   app.use('/users', authMid, usersRouter);
 
 // All Else
-  app.get('*', (req, res) => {
-    res.status(404).send({ message: 'Requested resource not found' });
+  app.get('*', (_, __, next) => {
+    next(new MyErr(404, 'Requested resource not found'));
   });
 
 // Error Handling
@@ -87,16 +89,7 @@ const { PORT = 3000 } = process.env;
   app.use(errors());
 
 // Central Error Handler
-  app.use((err, _, res, next) => {
-    const { statusCode = 500, message } = err;
-    res
-      .status(statusCode)
-      .send({
-        message: statusCode === 500
-          ? 'An error occurred on the server'
-          : message
-      });
-  });
+  app.use(errsCentral);
 
 
   app.listen(PORT, () => {

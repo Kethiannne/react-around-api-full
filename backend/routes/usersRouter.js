@@ -16,14 +16,14 @@ usersRouter.get('/', getAllUsers);
 usersRouter.get('/me', celebrate({
   body: Joi.object().keys({
     user: Joi.object().keys({
-      _id: Joi.string().min(24).max(24).required(),
+      _id: Joi.string().min(24).max(24).required().hex(),
     })
   })}), getCurrentUser);
 
 // Get A Single User
 usersRouter.get('/:_id', celebrate({
   params: Joi.object().keys({
-    _id: Joi.string().min(24).max(24).required(),
+    _id: Joi.string().min(24).max(24).required().hex(),
   })}), getUserById);
 
 // Create a New User (joi validation for this one happens in app.js)
