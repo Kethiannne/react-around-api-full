@@ -1,11 +1,11 @@
 const winston = require('winston');
 const expressWinston = require('express-winston');
-var path = require('path');
-var fs = require( 'fs' );
+const path = require('path');
+const fs = require('fs');
 
 const logsFolder = 'logs';
 
-if (!fs.existsSync(logsFolder)){
+if (!fs.existsSync(logsFolder)) {
   fs.mkdirSync(logsFolder);
 }
 
