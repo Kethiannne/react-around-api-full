@@ -26,8 +26,8 @@ const limiter = rateLimit({
 });
 
 const allowedOrigins = [
-  'https://www.kethianne.students.nomoreparties.site',
-  'https://kethianne.students.nomoreparties.site',
+  'https://www.kethianne-around.students.nomoreparties.site',
+  'https://kethianne-around.students.nomoreparties.site',
   'http://localhost:3000',
   'http://localhost:3001',
   'http://localhost:3002',
@@ -56,11 +56,12 @@ app.use(reqLogger);
 // Signin and Signup Routes
 
 // Temporary Crash Test
-app.get('/crash-test', () => {
-  setTimeout(() => {
-    throw new Error('Server will crash now');
-  }, 0);
-});
+// DELETE ME!
+// app.get('/crash-test', () => {
+//   setTimeout(() => {
+//     throw new Error('Server will crash now');
+//   }, 0);
+// });
 
 app.post('/signin', celebrate({
   body: Joi.object().keys({
