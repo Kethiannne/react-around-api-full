@@ -6,7 +6,7 @@ This repository contains the full API of "Around the U.S." project that features
 * a link to the repository with the complete React application which uses this API;
 * https://github.com/Kethiannne/react-around-auth
 
-* a link to the website that hosts your API.
+* a link to the website that hosts this API.
 * https://kethianne-around.students.nomoreparties.site
 
 ### Functionality & Technologies
