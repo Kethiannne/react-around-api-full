@@ -10,6 +10,7 @@ This repository contains the full API of "Around the U.S." project that features
 * https://kethianne-around.students.nomoreparties.site
 
 ### Functionality & Technologies
+* Express handles server functionality
 * This API uses a Mongo DB to handle user and card storage.
 * Helmet provides additional security.
 * CORS protection allows access only from selected routes
