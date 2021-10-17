@@ -1,8 +1,19 @@
 # react-around-api-full
-The API of "Around the U.S." with authorization and registration handled by the back-end server.
+### Overview
+The API of "Around the U.S." with authorization and registration handled by my back-end server.
 
-This repository contains the full API of "Around the U.S." project that features user authorization and user registration and handles cards and users. Please add to this readme:
-* a link to repository with the complete React application which uses this API;
+This repository contains the full API of "Around the U.S." project that features user authorization and user registration and handles cards and users.
+* a link to the repository with the complete React application which uses this API;
 * https://github.com/Kethiannne/react-around-auth
+
 * a link to the website that hosts your API.
-* https://www.kethianne-around.students.nomoreparties.site/
+* https://kethianne-around.students.nomoreparties.site
+
+### Functionality & Technologies
+* This API uses a Mongo DB to handle user and card storage.
+* Helmet provides additional security.
+* CORS protection allows access only from selected routes
+* Rate Limiting prevents standard DDOS attacks
+* Celebrate & Joi allow for validation of information before checks are made internally to smooth performance.
+* Central Error handling pulls errors from accross the app into one place for easier maintenance.
+* Winston is used to provide error and request logging for easier maintenance
